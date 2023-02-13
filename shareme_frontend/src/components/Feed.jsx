@@ -8,12 +8,13 @@ import Spinner from './Spinner';
 
 const Feed = () => {
   const [loading, setLoading] = useState(false);
-  const [pins, setPins] = useState(null);
+  const [pins, setPins] = useState();
   const { categoryId } = useParams();
 
   useEffect(() => {
-    setLoading(true);
+    console.log('pins', pins);
     if (categoryId) {
+      setLoading(true);
       const query = searchQuery(categoryId);
 
       client.fetch(query).then(data => {
@@ -21,6 +22,8 @@ const Feed = () => {
         setLoading(false);
       });
     } else {
+      setLoading(true);
+
       client.fetch(feedQuery).then(data => {
         setPins(data);
         setLoading(false);
