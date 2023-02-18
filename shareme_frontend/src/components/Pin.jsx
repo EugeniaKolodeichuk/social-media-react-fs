@@ -15,9 +15,7 @@ const Pin = ({ pin }) => {
   const { postedBy, image, _id, destination, save } = pin;
   const user = fetchUser();
 
-  //console.log('save', save);
-
-  const alreadySaved = !!save?.filter(item => item.postedBy._id === user.googleId)?.length;
+  const alreadySaved = !!save?.filter(item => item?.postedBy?._id === user?.googleId)?.length;
 
   const savePin = id => {
     if (!alreadySaved) {
@@ -27,10 +25,10 @@ const Pin = ({ pin }) => {
         .insert('after', 'save[-1]', [
           {
             _key: uuidv4(),
-            userId: user.googleId,
+            userId: user?.googleId,
             postedBy: {
               _type: 'postedBy',
-              _ref: user.googleId,
+              _ref: user?.googleId,
             },
           },
         ])
@@ -52,7 +50,6 @@ const Pin = ({ pin }) => {
       <div
         onMouseEnter={() => {
           setPostHovered(true);
-          console.log('hovered');
         }}
         onMouseLeave={() => setPostHovered(false)}
         onClick={() => navigate(`/pin-detail/${_id}`)}
@@ -79,6 +76,9 @@ const Pin = ({ pin }) => {
                 <button
                   type="button"
                   className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
+                  onClick={e => {
+                    e.stopPropagation();
+                  }}
                 >
                   {save?.length} Saved
                 </button>
@@ -107,7 +107,7 @@ const Pin = ({ pin }) => {
                   {destination.length > 15 ? `${destination.slice(0, 15)}...` : destination}
                 </a>
               )}
-              {postedBy?._id === user.googleId && (
+              {postedBy?._id === user?.googleId && (
                 <button
                   onClick={e => {
                     e.stopPropagation();

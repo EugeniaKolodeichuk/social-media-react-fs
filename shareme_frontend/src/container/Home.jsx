@@ -20,7 +20,6 @@ const Home = () => {
     const query = userQuery(userInfo?.googleId);
 
     client.fetch(query).then(data => {
-      //console.log('data', data);
       setUser(data[0]);
     });
   }, []);
